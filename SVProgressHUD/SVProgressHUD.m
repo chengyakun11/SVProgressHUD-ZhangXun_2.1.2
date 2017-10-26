@@ -1193,7 +1193,19 @@ static const CGFloat SVProgressHUDLabelSpacing = 8.0f;
     }
 #endif
 }
-
+ - (UIImage*)image:(UIImage*)image withTintColor:(UIColor*)color {
+     CGRect rect = CGRectMake(0.0f, 0.0f, image.size.width, image.size.height);
+     UIGraphicsBeginImageContextWithOptions(rect.size, NO, image.scale);
+     CGContextRef c = UIGraphicsGetCurrentContext();
+     [image drawInRect:rect];
+     CGContextSetFillColorWithColor(c, [color CGColor]);
+     CGContextSetBlendMode(c, kCGBlendModeSourceAtop);
+     CGContextFillRect(c, rect);
+     UIImage *tintedImage = UIGraphicsGetImageFromCurrentImageContext();
+     UIGraphicsEndImageContext();
+     
+     return tintedImage;
+ }
 - (UIControl*)controlView {
     if(!_controlView) {
         _controlView = [UIControl new];
